@@ -10,7 +10,6 @@ El almacenamiento de la información será en memoria, en estructuras de objetos
 
 Los usuarios podrán interactuar con la tienda mediante comandos por consola en formato texto. Para ello se deberá hacer uso de apache commons-cli. La ejecución del programa deberá terminar con la escritura del comando 'quit'.
 
-
 ### Perfiles de usuario:
 
 1. Gestor: debe poder gestionar el producto disponible, reponer stock y revisar las compras realizadas.
