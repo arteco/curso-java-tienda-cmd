@@ -28,7 +28,7 @@ public interface ShoppingCart {
     /**
      * Crea un Order con el total de items del carrito y vacía el carrito.
      */
-    Order checkout();
+    Order checkout(Shop shop);
 
     /**
      * Si el cliente ha bloqueado un item y lo quiere anular, ese item vuelve a estar disponible en la tienda.

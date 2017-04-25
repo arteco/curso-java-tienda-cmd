@@ -8,8 +8,6 @@ import com.artecoconsulting.compra.model.Item;
 import com.artecoconsulting.compra.model.Order;
 import com.artecoconsulting.compra.model.Shop;
 import com.artecoconsulting.compra.model.ShoppingCart;
-import com.sun.deploy.util.OrderedHashSet;
-import com.sun.media.sound.MidiUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -53,14 +51,14 @@ public class ShopTest {
      */
 
     @Test
-    public void removeItemTest(){
+    public void removeItemTest() {
         Shop shop = env.getShop();
-        Item  raton = new Item("Raton", 101L, new BigDecimal(11.0), 1);
+        Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 1);
         shop.removeItem(101L);
         List<Item> items = shop.getItems();
         boolean found = false;
         for (Item item : items) {
-            if (!found){
+            if (!found) {
                 found = false;
             }
         }
@@ -74,7 +72,7 @@ public class ShopTest {
     public void reserveItemTest() throws NotAvailableItem {
         Shop shop = env.getShop();
         ShoppingCart cart = new InMemoryShoppingCart();
-        Item  raton = new Item("Raton", 101L, new BigDecimal(11.0), 1);
+        Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 1);
         shop.reserveItem(101L, 1, cart);
         cart.addItem(raton);
 
@@ -98,28 +96,28 @@ public class ShopTest {
      */
     @Test
     public void getOrdersTest() throws NotAvailableItem {
+        // inicializaciones
         ShoppingCart cart = new InMemoryShoppingCart();
         Shop shop = env.getShop();
-        Order pedido = new Order();
         Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 2);
-        try {
-            shop.reserveItem(101L, 2, cart );
-        } catch (NotAvailableItem notAvailableItem) {
-            notAvailableItem.printStackTrace();
-        }
-        cart.addItem(raton);
-        cart.checkout();
-        List<Order> orders = shop.getOrders();
-        orders.add(pedido);
+
+        //añadimos el item al stock
+        shop.saveItem(raton);
+
+        // compramos el item
+        shop.reserveItem(101L, 1, cart);
+
+        Order pedido = cart.checkout(shop);
 
         boolean found = false;
-        for (Order order : orders) {
-            if (found){
-                found = true;
+        for (Order order : shop.getOrders()) {
+            for (Item item : order.getOrders()) {
+                if (item.getId().equals(101l)) {
+                    found = true;
+                    break;
+                }
             }
         }
         assertTrue(found);
-        assertFalse(!found);
-
     }
 }

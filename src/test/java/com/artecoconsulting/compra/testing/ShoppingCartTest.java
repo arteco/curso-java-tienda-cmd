@@ -26,17 +26,14 @@ public class ShoppingCartTest {
      * Comprueba si al reservar un item pasa al carrito disminuyendo en la cantiad del stock
      */
     @Test
-    public void reserveItemTest()  {
+    public void reserveItemTest() throws NotAvailableItem {
         Shop shop = env.getShop();
         ShoppingCart cart = new InMemoryShoppingCart();
-        Item  raton = new Item("Raton", -101L, new BigDecimal(11.0), 1);
-        try {
-            shop.reserveItem(raton.getId(), 1, cart);
-            assertTrue(false);
-        } catch (NotAvailableItem notAvailableItem) {
-            notAvailableItem.printStackTrace();
-            assertTrue(true);
-        }
+        Item raton = new Item("Raton", -101L, new BigDecimal(11.0), 1);
+
+        shop.reserveItem(raton.getId(), 1, cart);
+        assertTrue(false);
+
     }
 
     /**
@@ -72,42 +69,40 @@ public class ShoppingCartTest {
         }
     }
 
-        /**
-         * Comprueba si se ha guardado la venta en la lista de ordenes finalizados.
-         */
-        @Test
-        public void checkoutTest() throws NotAvailableItem {
-            Shop shop = env.getShop();
+    /**
+     * Comprueba si se ha guardado la venta en la lista de ordenes finalizados.
+     */
+    @Test
+    public void checkoutTest() throws NotAvailableItem {
+        Shop shop = env.getShop();
 
-            Item item = new Item();
-            item.setId(-500l);
-            item.setCantidad(1);
-            item.setPrecio(new BigDecimal(100));
-            item.setNombre("Prueba item");
-            shop.saveItem(item);
+        Item item = new Item();
+        item.setId(-500l);
+        item.setCantidad(1);
+        item.setPrecio(new BigDecimal(100));
+        item.setNombre("Prueba item");
+        shop.saveItem(item);
 
-            ShoppingCart cart = new InMemoryShoppingCart();
+        ShoppingCart cart = new InMemoryShoppingCart();
 
-            shop.reserveItem(-500l,1,cart);
+        shop.reserveItem(-500l, 1, cart);
 
-            item = shop.getItem(-500l);
-            assertNull(item);
+        item = shop.getItem(-500l);
+        assertNull(item);
 
-            Order order = cart.checkout();
-            assertEquals(order.getOrders().get(0).getNombre(),"Prueba item");
+        Order order = cart.checkout(shop);
+        assertEquals(order.getOrders().get(0).getNombre(), "Prueba item");
 
-            int orders = shop.getOrders().size();
+        int orders = shop.getOrders().size();
 
-            shop.addOrder(order);
-
-            assertEquals(orders+1, shop.getOrders().size());
-        }
+        assertEquals(orders + 1, shop.getOrders().size());
+    }
 
     /**
      * Comprueba si se elimina un item que se añadió al carrito.
      */
     @Test
-    public void removeOneItemTest(){
+    public void removeOneItemTest() {
         ShoppingCart cart = new InMemoryShoppingCart();
         Shop shop = env.getShop();
         Item teclado = new Item("Teclado", 100L, new BigDecimal(15), 1);
@@ -124,7 +119,7 @@ public class ShoppingCartTest {
      * Comprueba si se vacía el carrito por completo.
      */
     @Test
-    public void removeAllItemTest(){
+    public void removeAllItemTest() {
         ShoppingCart cart = new InMemoryShoppingCart();
         Shop shop = env.getShop();
         Item teclado = new Item("Teclado", 100L, new BigDecimal(15), 1);
@@ -137,7 +132,6 @@ public class ShoppingCartTest {
         assertEquals(0, cart.getProductCount());
         assertEquals(new BigDecimal(0), cart.getTotalCartPrice());
     }
-
 
 
 }

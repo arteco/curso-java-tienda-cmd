@@ -53,7 +53,7 @@ public class InMemoryShop implements Shop {
             } else {
                 // si no se ha encontrado el item en bd  se puede añadir, ya que
                 // no se ha encontrado, o lanzar un error (throw new Exception())
-                //TODO: pendiente de baja prioridad
+                items.add(item);
             }
         }
         return guradado;
@@ -84,12 +84,12 @@ public class InMemoryShop implements Shop {
         Item itemShop = getItem(idItem);
         if (itemShop != null && itemShop.getCantidad() >= itemQuantity) {
             // podemos pasar el item al carrito
-            Item itemCar = new Item(
+            Item itemCart = new Item(
                     itemShop.getNombre(),
                     itemShop.getId(),
                     itemShop.getPrecio(),
                     itemQuantity);
-            cart.addItem(itemCar);
+            cart.addItem(itemCart);
             itemShop.setCantidad(itemShop.getCantidad() - itemQuantity);
             // si nos quedamos sin items disponibles lo eliminamos de la tienda
             if (itemShop.getCantidad() <= 0) {

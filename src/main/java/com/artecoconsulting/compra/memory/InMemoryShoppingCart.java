@@ -43,8 +43,10 @@ public class InMemoryShoppingCart implements ShoppingCart {
     }
 
     @Override
-    public Order checkout() {
-        Order order = new Order();
+    public Order checkout(Shop shop) {
+        Order order = new Order(new ArrayList<>(items));
+        items.clear();
+        shop.getOrders().add(order);
         return order;
     }
 
