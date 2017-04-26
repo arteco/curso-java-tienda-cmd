@@ -10,6 +10,7 @@ public interface ShoppingCart {
 
     /**
      * Añande un item al carrito.
+     *
      * @param item
      * @return
      */
@@ -32,23 +33,25 @@ public interface ShoppingCart {
 
     /**
      * Si el cliente ha bloqueado un item y lo quiere anular, ese item vuelve a estar disponible en la tienda.
+     *
      * @param item
      * @param shop
      */
-   void removeItem(Item item, Shop shop);
+    void removeItem(Item item, Shop shop);
 
     /**
      * Si el cliente quiere anular toda la compra, todos estos items vuelven a estar disponibles en la tienda.
+     *
      * @param shop
      */
     void removeAll(Shop shop);
 
     /**
      * Al añadir items en el carrito, se va sumando al coste total del carrito.
+     *
      * @return
      */
     BigDecimal getTotalCartPrice();
-
 
 
 }

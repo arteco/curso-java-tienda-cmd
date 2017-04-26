@@ -1,6 +1,5 @@
 package com.artecoconsulting.compra.memory;
 
-import com.artecoconsulting.compra.Environment;
 import com.artecoconsulting.compra.model.Item;
 import com.artecoconsulting.compra.model.Order;
 import com.artecoconsulting.compra.model.Shop;
@@ -14,8 +13,8 @@ import java.util.List;
  */
 public class InMemoryShop implements Shop {
 
-    private List<Item> items = new ArrayList();
-    private List<Order> orders = new ArrayList();
+    private List<Item> items = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     @Override
     public Item getItem(Long id) {
@@ -62,7 +61,7 @@ public class InMemoryShop implements Shop {
     @Override
     public boolean removeItem(Long id) {
         Item item = getItem(id);
-        if (item == null) {
+        if (item != null) {
             items.remove(item);
             return true;
         }
@@ -112,7 +111,7 @@ public class InMemoryShop implements Shop {
 
     @Override
     public void addOrder(Order order) {
-        if (order!=null) {
+        if (order != null) {
             orders.add(order);
         }
     }

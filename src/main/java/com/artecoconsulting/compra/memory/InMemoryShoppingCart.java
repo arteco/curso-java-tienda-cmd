@@ -1,6 +1,5 @@
 package com.artecoconsulting.compra.memory;
 
-import com.artecoconsulting.compra.Environment;
 import com.artecoconsulting.compra.model.Item;
 import com.artecoconsulting.compra.model.Order;
 import com.artecoconsulting.compra.model.Shop;
@@ -15,13 +14,12 @@ import java.util.List;
  */
 public class InMemoryShoppingCart implements ShoppingCart {
 
-    private List<Item> items = new ArrayList();
-
+    private List<Item> items = new ArrayList<>();
 
 
     @Override
     public boolean addItem(Item item) {
-        if (item != null){
+        if (item != null) {
             items.add(item);
             return true;
         }
@@ -54,13 +52,14 @@ public class InMemoryShoppingCart implements ShoppingCart {
     public void removeItem(Item item, Shop shop) {
         items.remove(item);
         Item dbItem = shop.getItem(item.getId());
-        if (dbItem!=null){
-            dbItem.setCantidad(item.getCantidad()+ dbItem.getCantidad());
+        if (dbItem != null) {
+            dbItem.setCantidad(item.getCantidad() + dbItem.getCantidad());
         }
     }
 
     @Override
     public void removeAll(Shop shop) {
+        List<Item> items = new ArrayList<>(this.items);
         for (Item item : items) {
             removeItem(item, shop);
         }
@@ -68,7 +67,7 @@ public class InMemoryShoppingCart implements ShoppingCart {
 
     @Override
     public BigDecimal getTotalCartPrice() {
-        BigDecimal costeTotal =  new BigDecimal(0);
+        BigDecimal costeTotal = new BigDecimal(0);
         for (Item item : items) {
             costeTotal = costeTotal.add(item.getPrecio())
                     .multiply(BigDecimal.valueOf(item.getCantidad()));

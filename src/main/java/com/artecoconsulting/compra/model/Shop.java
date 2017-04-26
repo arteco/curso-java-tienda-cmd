@@ -12,6 +12,7 @@ public interface Shop {
     /**
      * Consulta un item del stock.
      * Esta operación permite consultar un producto según su id.
+     *
      * @param id del item a localizar en BD.
      * @return item con id = al parámetro o null si no encuentra el item
      */
@@ -37,6 +38,7 @@ public interface Shop {
     /**
      * Bloquea un item del stock decrementando su cantidad pasándolo al carrito.
      * Si cantidad == 0 debe eliminar el item de la tienda.
+     *
      * @param idItem
      * @param itemQuantity
      * @param cart
@@ -45,12 +47,14 @@ public interface Shop {
 
     /**
      * Devuelve el número de items del mismo tipo disponibles en el stock
+     *
      * @param id de item
      */
     int getTotalQuantity(Long id);
 
     /**
      * Añande todas las ventas realizadas a la lista de ventas.
+     *
      * @param order
      */
     void addOrder(Order order);

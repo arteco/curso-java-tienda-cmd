@@ -13,11 +13,11 @@ import java.util.List;
 public class Order {
     List<Item> orders;
 
-    public Order(List<Item> items){
+    public Order(List<Item> items) {
         this.orders = items;
     }
 
-    public BigDecimal getTotalPrice(){
+    public BigDecimal getTotalPrice() {
         throw new NotImplementedException();
     }
 }
