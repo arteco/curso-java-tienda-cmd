@@ -1,4 +1,4 @@
-package com.artecoconsulting.compra.memory;
+package com.artecoconsulting.compra.mysql;
 
 import com.artecoconsulting.compra.model.Item;
 import com.artecoconsulting.compra.model.Order;
@@ -10,17 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by arteco1 on 24/04/2017.
+ * Created by arteco1 on 27/04/2017.
  */
-public class InMemoryShoppingCart implements ShoppingCart {
+public class MysqlShoppingCart implements ShoppingCart {
 
-    private List<Item> items = new ArrayList<>();
+    private static long count = 0;
+
+    private Long cartId = count++;
+
+    private final Database database;
+
+    public MysqlShoppingCart(Database database) {
+        this.database = database;
+    }
 
 
     @Override
     public boolean addItem(Item item) {
         if (item != null) {
-            items.add(item);
+            database.saveCartItem(cartId, item);
             return true;
         }
         return false;
@@ -28,13 +36,13 @@ public class InMemoryShoppingCart implements ShoppingCart {
 
     @Override
     public List<Item> getItems() {
-        return items;
+        return database.getCartItems(cartId);
     }
 
     @Override
     public int getProductCount() {
         int totalCantidad = 0;
-        for (Item item : items) {
+        for (Item item : getItems()) {
             totalCantidad += item.getCantidad();
         }
         return totalCantidad;
@@ -42,18 +50,19 @@ public class InMemoryShoppingCart implements ShoppingCart {
 
     @Override
     public Order checkout(Shop shop) {
-        Order order = new Order(new ArrayList<>(items));
-        items.clear();
+        Order order = new Order(new ArrayList<>(getItems()));
+        database.removeAllCartItems(cartId);
         shop.getOrders().add(order);
         return order;
     }
 
     @Override
     public void removeItem(Item item, Shop shop) {
-        items.remove(item);
+        database.removeCartItem(cartId, item);
         Item dbItem = shop.getItem(item.getId());
         if (dbItem != null) {
             dbItem.setCantidad(item.getCantidad() + dbItem.getCantidad());
+            database.saveItem(dbItem);
         }
     }
 

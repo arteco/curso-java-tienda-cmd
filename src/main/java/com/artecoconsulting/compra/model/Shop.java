@@ -1,6 +1,6 @@
 package com.artecoconsulting.compra.model;
 
-import com.artecoconsulting.compra.memory.NotAvailableItem;
+import com.artecoconsulting.compra.common.NotAvailableItem;
 
 import java.util.List;
 

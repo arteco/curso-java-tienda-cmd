@@ -4,7 +4,7 @@ package com.artecoconsulting.compra.testing;
 import com.artecoconsulting.compra.Environment;
 import com.artecoconsulting.compra.memory.InMemoryEnvironment;
 import com.artecoconsulting.compra.memory.InMemoryShoppingCart;
-import com.artecoconsulting.compra.memory.NotAvailableItem;
+import com.artecoconsulting.compra.common.NotAvailableItem;
 import com.artecoconsulting.compra.model.Item;
 import com.artecoconsulting.compra.model.Order;
 import com.artecoconsulting.compra.model.Shop;
@@ -19,8 +19,14 @@ import static org.junit.Assert.*;
 /**
  * Created by arteco1 on 12/04/2017.
  */
-public class ShoppingCartTest {
-    private Environment env = new InMemoryEnvironment();
+public abstract class ShoppingCartTest {
+
+
+    final private Environment env;
+
+    protected ShoppingCartTest(Environment env) {
+        this.env = env;
+    }
 
     /**
      * Comprueba si el carrito esta vacio.

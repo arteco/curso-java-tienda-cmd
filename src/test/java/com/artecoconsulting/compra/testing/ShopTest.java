@@ -3,7 +3,7 @@ package com.artecoconsulting.compra.testing;
 import com.artecoconsulting.compra.Environment;
 import com.artecoconsulting.compra.memory.InMemoryEnvironment;
 import com.artecoconsulting.compra.memory.InMemoryShoppingCart;
-import com.artecoconsulting.compra.memory.NotAvailableItem;
+import com.artecoconsulting.compra.common.NotAvailableItem;
 import com.artecoconsulting.compra.model.Item;
 import com.artecoconsulting.compra.model.Order;
 import com.artecoconsulting.compra.model.Shop;
@@ -11,7 +11,6 @@ import com.artecoconsulting.compra.model.ShoppingCart;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,9 +19,13 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by arteco1 on 12/04/2017.
  */
-public class ShopTest {
+public abstract class ShopTest {
 
-    private Environment env = new InMemoryEnvironment();
+    final private Environment env;
+
+    protected ShopTest(Environment env) {
+        this.env = env;
+    }
 
     /**
      * Comprueba que tras añadir un elemento en la tienda, ese esté disponible para su compra

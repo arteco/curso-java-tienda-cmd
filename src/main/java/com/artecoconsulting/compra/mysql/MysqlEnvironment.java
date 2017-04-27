@@ -1,0 +1,26 @@
+package com.artecoconsulting.compra.mysql;
+
+import com.artecoconsulting.compra.Environment;
+import com.artecoconsulting.compra.memory.InMemoryShop;
+import com.artecoconsulting.compra.memory.InMemoryShoppingCart;
+import com.artecoconsulting.compra.model.Shop;
+import com.artecoconsulting.compra.model.ShoppingCart;
+
+/**
+ * Created by arteco1 on 27/04/2017.
+ */
+public class MysqlEnvironment implements Environment {
+
+    private Database database = new Database();
+    private Shop shop = new MysqlShop(database);
+    private ShoppingCart cart = new MysqlShoppingCart(database);
+
+    @Override
+    public Shop getShop() {
+        return shop;
+    }
+
+    public ShoppingCart getCart() {
+        return cart;
+    }
+}

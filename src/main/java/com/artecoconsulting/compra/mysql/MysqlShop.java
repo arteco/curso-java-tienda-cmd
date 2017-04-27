@@ -1,4 +1,4 @@
-package com.artecoconsulting.compra.memory;
+package com.artecoconsulting.compra.mysql;
 
 import com.artecoconsulting.compra.common.NotAvailableItem;
 import com.artecoconsulting.compra.model.Item;
@@ -10,21 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by arteco1 on 20/04/2017.
+ * Created by arteco1 on 27/04/2017.
  */
-public class InMemoryShop implements Shop {
+public class MysqlShop  implements Shop {
 
-    private List<Item> items = new ArrayList<>();
-    private List<Order> orders = new ArrayList<>();
+    private final Database database;
+
+    public MysqlShop(Database database) {
+        this.database = database;
+    }
 
     @Override
     public Item getItem(Long id) {
-        for (Item item : items) {
-            if (id.equals(item.getId())) {
-                return item;
-            }
-        }
-        return null;
+        return database.getItem(id);
     }
 
     @Override
@@ -32,8 +30,9 @@ public class InMemoryShop implements Shop {
         boolean guradado = false;
         if (item.getId() == null) {
             // Debemos crear un id para poder referencialo de manera unequívoca después.
-            item.setId((long) items.size());
-            items.add(item);
+            long numItems = database.countItems();
+            item.setId(numItems);
+            database.saveItem(item);
             guradado = true;
 
         } else {
@@ -43,6 +42,7 @@ public class InMemoryShop implements Shop {
                 dbItem.setNombre(item.getNombre());
                 dbItem.setPrecio(item.getPrecio());
                 dbItem.setCantidad(item.getCantidad());
+                database.saveItem(dbItem);
                 guradado = true;
                 // dbItem.setId(); el ID no se debe modificar, una vez asignado debe
                 // permanecer siempre el mismo para poder localizar el item en la BD.
@@ -53,7 +53,7 @@ public class InMemoryShop implements Shop {
             } else {
                 // si no se ha encontrado el item en bd  se puede añadir, ya que
                 // no se ha encontrado, o lanzar un error (throw new Exception())
-                items.add(item);
+                database.saveItem(item);
             }
         }
         return guradado;
@@ -63,7 +63,7 @@ public class InMemoryShop implements Shop {
     public boolean removeItem(Long id) {
         Item item = getItem(id);
         if (item != null) {
-            items.remove(item);
+            database.removeItem(item);
             return true;
         }
         return false;
@@ -71,7 +71,7 @@ public class InMemoryShop implements Shop {
 
     @Override
     public List<Item> getItems() {
-        return items;
+        return database.getItems();
     }
 
 
@@ -103,7 +103,7 @@ public class InMemoryShop implements Shop {
     @Override
     public int getTotalQuantity(Long id) {
         int cantidad = 0;
-        for (Item item : items) {
+        for (Item item : database.getItems()) {
             cantidad += item.getCantidad();
         }
         return cantidad;
@@ -113,15 +113,16 @@ public class InMemoryShop implements Shop {
     @Override
     public void addOrder(Order order) {
         if (order != null) {
-            orders.add(order);
+            database.saveOrder(order);
         }
     }
 
 
     @Override
     public List<Order> getOrders() {
-        return orders;
+        return database.getOrders();
     }
 
-
 }
+
+
