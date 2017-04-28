@@ -9,7 +9,7 @@ import com.artecoconsulting.compra.testing.ShoppingCartTest;
  */
 public class MySqlShoppingCartTest extends ShoppingCartTest {
 
-    protected MySqlShoppingCartTest() {
+    public MySqlShoppingCartTest() {
         super(new MysqlEnvironment());
     }
 }

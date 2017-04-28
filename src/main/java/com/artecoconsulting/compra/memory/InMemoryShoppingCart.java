@@ -44,7 +44,7 @@ public class InMemoryShoppingCart implements ShoppingCart {
     public Order checkout(Shop shop) {
         Order order = new Order(new ArrayList<>(items));
         items.clear();
-        shop.getOrders().add(order);
+        shop.addOrder(order);
         return order;
     }
 

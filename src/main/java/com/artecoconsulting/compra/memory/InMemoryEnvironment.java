@@ -17,6 +17,11 @@ public class InMemoryEnvironment implements Environment {
         return shop;
     }
 
+    @Override
+    public ShoppingCart newShoppingCart() {
+        return new InMemoryShoppingCart();
+    }
+
     public ShoppingCart getCart() {
         return cart;
     }

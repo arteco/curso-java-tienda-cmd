@@ -1,6 +1,7 @@
 package com.artecoconsulting.compra;
 
 import com.artecoconsulting.compra.model.Shop;
+import com.artecoconsulting.compra.model.ShoppingCart;
 
 /**
  * Created by arteco1 on 20/04/2017.
@@ -13,5 +14,6 @@ public interface Environment {
      * @return
      */
     Shop getShop();
+    ShoppingCart newShoppingCart();
 
 }

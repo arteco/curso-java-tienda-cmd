@@ -9,7 +9,7 @@ import com.artecoconsulting.compra.testing.ShopTest;
  */
 public class InMemoryShopTest extends ShopTest {
 
-    protected InMemoryShopTest() {
+    public InMemoryShopTest() {
         super(new InMemoryEnvironment());
     }
 }

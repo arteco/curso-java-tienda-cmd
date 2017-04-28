@@ -75,6 +75,9 @@ public class Database {
     public void saveItem(Item item) {
         //insert or update, en función de si viene id = null o no
         if (item.getId()==null){
+            item.setId((long) getItems().size());
+        }
+        if (getItem(item.getId())== null){
             insertItem(item);
         }else {
             updateItem(item);
@@ -129,9 +132,17 @@ public class Database {
     public void saveOrder(Order order) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("INSERT INTO orders where id != NULL");
-            ps.setLong(1, order);
-
+            if (order.getIdOrder()==null){
+                order.setIdOrder((long) getOrders().size());
+            }
+            for (Item item : order.getOrders()) {
+                ps = conn.prepareStatement("INSERT INTO orders(idOrder, idItem, cantidad) values(?,?,?)");
+                ps.setLong(1, order.getIdOrder());
+                ps.setLong(2, item.getId());
+                ps.setInt(3, item.getCantidad());
+                ps.executeUpdate();
+            }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -140,21 +151,37 @@ public class Database {
 
     public long countItems() {
         PreparedStatement ps = null;
+        int cantidad = 0;
         try {
-            ps = conn.prepareStatement("Select cantidad from items where id != NULL");
-            ps.setInt(int);
+            ps = conn.prepareStatement("Select count(cantidad) from items where id = ?");
+            ps.setInt(1, cantidad);
+            ResultSet rs = ps.executeQuery();
+            for (Item item : getItems()){
+                cantidad ++; //= item.getCantidad();
+            }
+//            if (rs.next()){
+//                cantidad ++;
+//                return parseItem(rs).getCantidad().intValue();
+//            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return cantidad;
+
     }
 
     public List<Order> getOrders() {
         try {
             List<Order> orders = new ArrayList<>();
-            PreparedStatement ps = conn.prepareStatement("select * from orders order by id asc");
+            PreparedStatement ps = conn.prepareStatement("select * from orders ");
             ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = parseOrder(rs);
+                orders.add(order);
+            }
+            rs.close();
+            ps.close();
             return orders;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -162,15 +189,74 @@ public class Database {
 
     }
 
+    private Order parseOrder(ResultSet rs) throws SQLException {
+        Order order = new Order();
+       // order.setIdOrder(rs.getLong("idOrder"));
+        return order;
+    }
+
     public void saveCartItem(Long cartId, Item item) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("INSERT INTO cartItem(idCart, idItem, cantidad) values(?,?,?)");
+            ps.setLong(1, cartId);
+            ps.setLong(2, item.getId());
+            ps.setInt(3, item.getCantidad());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Item> getCartItems(Long cartId) {
+        try {
+            List<Item> cartItems = new ArrayList<>();
+            PreparedStatement ps = conn.prepareStatement("select * from cartItem ");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Item item = parseCartItem(rs);
+                cartItems.add(item);
+            }
+            rs.close();
+            ps.close();
+            return cartItems;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    private Item parseCartItem(ResultSet rs) throws SQLException{
+        Item item = new Item();
+        item.setId(rs.getLong("id"));
+        item.setNombre(rs.getString("nombre"));
+        item.setCantidad(rs.getInt("cantidad"));
+        item.setPrecio(rs.getBigDecimal("precio"));
+        return item;
+
     }
 
     public void removeAllCartItems(Long cartId) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("DELETE * FROM cartItem");
+            ps.setLong(1, cartId);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeCartItem(Long cartId, Item item) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("DELETE FROM items where id = ?");
+            ps.setLong(1, item.getId());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

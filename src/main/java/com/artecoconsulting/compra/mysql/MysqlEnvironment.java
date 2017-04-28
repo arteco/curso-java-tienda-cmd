@@ -13,14 +13,14 @@ public class MysqlEnvironment implements Environment {
 
     private Database database = new Database();
     private Shop shop = new MysqlShop(database);
-    private ShoppingCart cart = new MysqlShoppingCart(database);
 
     @Override
     public Shop getShop() {
         return shop;
     }
 
-    public ShoppingCart getCart() {
-        return cart;
+    @Override
+    public ShoppingCart newShoppingCart() {
+        return new MysqlShoppingCart(database);
     }
 }

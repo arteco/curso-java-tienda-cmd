@@ -1,11 +1,8 @@
 package com.artecoconsulting.compra.testing;
 
 import com.artecoconsulting.compra.Environment;
-import com.artecoconsulting.compra.memory.InMemoryEnvironment;
-import com.artecoconsulting.compra.memory.InMemoryShoppingCart;
 import com.artecoconsulting.compra.common.NotAvailableItem;
 import com.artecoconsulting.compra.model.Item;
-import com.artecoconsulting.compra.model.Order;
 import com.artecoconsulting.compra.model.Shop;
 import com.artecoconsulting.compra.model.ShoppingCart;
 import org.junit.Test;
@@ -70,8 +67,8 @@ public abstract class ShopTest {
     @Test
     public void reserveItemTest() throws NotAvailableItem {
         Shop shop = env.getShop();
-        ShoppingCart cart = new InMemoryShoppingCart();
-        Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 1);
+        ShoppingCart cart = env.newShoppingCart();
+        Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 5);
         //añadimos el item al stock
         shop.saveItem(raton);
         shop.reserveItem(101L, 1, cart);
@@ -102,8 +99,8 @@ public abstract class ShopTest {
     @Test
     public void getOrdersTest() throws NotAvailableItem {
         // inicializaciones
-        ShoppingCart cart = new InMemoryShoppingCart();
-        ShoppingCart cart1 = new InMemoryShoppingCart();
+        ShoppingCart cart = env.newShoppingCart();
+        ShoppingCart cart1 = env.newShoppingCart();
 
         Shop shop = env.getShop();
         Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 2);
@@ -118,12 +115,14 @@ public abstract class ShopTest {
 
        // Order pedido = cart.checkout(shop);
         //Order pedido1 = cart1.checkout(shop);
+        int numOrders = shop.getOrders().size();
+
         cart.checkout(shop);
         cart1.checkout(shop);
 
-        assertEquals(2, shop.getOrders().size());
+        assertEquals(numOrders + 2, shop.getOrders().size());
 
-        boolean found = false;
+        /*boolean found = false;
         for (Order order : shop.getOrders()) {
             for (Item item : order.getOrders()) {
                 if (item.getId().equals(101L)) {
@@ -133,7 +132,7 @@ public abstract class ShopTest {
                 }
             }
         }
-        assertTrue(found);
+        assertTrue(found);*/
 
     }
 }

@@ -2,8 +2,6 @@ package com.artecoconsulting.compra.testing;
 
 
 import com.artecoconsulting.compra.Environment;
-import com.artecoconsulting.compra.memory.InMemoryEnvironment;
-import com.artecoconsulting.compra.memory.InMemoryShoppingCart;
 import com.artecoconsulting.compra.common.NotAvailableItem;
 import com.artecoconsulting.compra.model.Item;
 import com.artecoconsulting.compra.model.Order;
@@ -24,7 +22,7 @@ public abstract class ShoppingCartTest {
 
     final private Environment env;
 
-    protected ShoppingCartTest(Environment env) {
+    public ShoppingCartTest(Environment env) {
         this.env = env;
     }
 
@@ -33,7 +31,7 @@ public abstract class ShoppingCartTest {
      */
     @Test
     public void emptyCartTest() {
-        ShoppingCart cart = new InMemoryShoppingCart();
+        ShoppingCart cart = env.newShoppingCart();
         assertEquals(0, cart.getProductCount());
     }
 
@@ -42,7 +40,7 @@ public abstract class ShoppingCartTest {
      */
     @Test
     public void addItemTest() {
-        ShoppingCart cart = new InMemoryShoppingCart();
+        ShoppingCart cart = env.newShoppingCart();
         Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 1);
         Item pantalla = new Item("Pantalla", 105L, new BigDecimal(100.0), 1);
         Item cpu = new Item("CPU", 110L, new BigDecimal(405), 1);
@@ -69,7 +67,7 @@ public abstract class ShoppingCartTest {
         item.setNombre("Prueba item");
         shop.saveItem(item);
 
-        ShoppingCart cart = new InMemoryShoppingCart();
+        ShoppingCart cart = env.newShoppingCart();
 
         shop.reserveItem(-500L, 1, cart);
 
@@ -88,7 +86,7 @@ public abstract class ShoppingCartTest {
      */
     @Test
     public void removeOneItemTest() {
-        ShoppingCart cart = new InMemoryShoppingCart();
+        ShoppingCart cart = env.newShoppingCart();
         Shop shop = env.getShop();
         Item teclado = new Item("Teclado", 100L, new BigDecimal(15), 1);
         Item pantalla = new Item("Pantalla", 105L, new BigDecimal(100.0), 1);
@@ -106,7 +104,7 @@ public abstract class ShoppingCartTest {
      */
     @Test
     public void removeAllItemTest() {
-        ShoppingCart cart = new InMemoryShoppingCart();
+        ShoppingCart cart = env.newShoppingCart();
         Shop shop = env.getShop();
         Item teclado = new Item("Teclado", 100L, new BigDecimal(15), 1);
         Item pantalla = new Item("Pantalla", 105L, new BigDecimal(100.0), 1);
