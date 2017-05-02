@@ -7,6 +7,12 @@ import java.util.List;
  * Created by arteco1 on 12/04/2017.
  */
 public interface ShoppingCart {
+    /**
+     * Devuelve el ID del Shopping Cart para
+     * poder referenciarle después
+     * @return
+     */
+    Long getId();
 
     /**
      * Añande un item al carrito.

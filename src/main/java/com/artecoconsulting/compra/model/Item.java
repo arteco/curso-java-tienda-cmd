@@ -14,11 +14,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Item {
-
-    private String nombre;
     private Long id;
-    private BigDecimal precio;
+    private String nombre;
     private Integer cantidad;
-
-
+    private BigDecimal precio;
 }

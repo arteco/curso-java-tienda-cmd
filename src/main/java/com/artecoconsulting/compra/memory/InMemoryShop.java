@@ -85,10 +85,10 @@ public class InMemoryShop implements Shop {
         if (itemShop != null && itemShop.getCantidad() >= itemQuantity) {
             // podemos pasar el item al carrito
             Item itemCart = new Item(
-                    itemShop.getNombre(),
                     itemShop.getId(),
-                    itemShop.getPrecio(),
-                    itemQuantity);
+                    itemShop.getNombre(),
+                    itemQuantity,
+                    itemShop.getPrecio());
             cart.addItem(itemCart);
             itemShop.setCantidad(itemShop.getCantidad() - itemQuantity);
             // si nos quedamos sin items disponibles lo eliminamos de la tienda

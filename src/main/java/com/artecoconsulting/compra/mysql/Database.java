@@ -126,9 +126,6 @@ public class Database {
         }
     }
 
-    //TODO
-
-
     public void saveOrder(Order order) {
         PreparedStatement ps = null;
         try {
@@ -159,11 +156,6 @@ public class Database {
             for (Item item : getItems()){
                 cantidad ++; //= item.getCantidad();
             }
-//            if (rs.next()){
-//                cantidad ++;
-//                return parseItem(rs).getCantidad().intValue();
-//            }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -173,12 +165,27 @@ public class Database {
 
     public List<Order> getOrders() {
         try {
+            // TODO: utilizar un HashMap<Long,Order>
             List<Order> orders = new ArrayList<>();
-            PreparedStatement ps = conn.prepareStatement("select * from orders ");
+            PreparedStatement ps = conn.prepareStatement("select * from orders order by idOrder asc");
             ResultSet rs = ps.executeQuery();
+            Long lastOrderId = null;
+            Order order = null;
             while (rs.next()) {
-                Order order = parseOrder(rs);
-                orders.add(order);
+                long orderId = rs.getLong("idOrder");
+                if (lastOrderId == null || orderId != lastOrderId){
+                    order = new Order();
+                    order.setIdOrder(orderId);
+                    order.setOrders(new ArrayList<Item>());
+                    orders.add(order);
+                }
+
+                //añadir items dentro de order
+                Item item = new Item();
+                item.setId(rs.getLong("idItem"));
+                item.setCantidad(rs.getInt("cantidad"));
+                order.getOrders().add(item);
+
             }
             rs.close();
             ps.close();
@@ -195,13 +202,13 @@ public class Database {
         return order;
     }
 
-    public void saveCartItem(Long cartId, Item item) {
+    public void saveCartItem(Long cartId, Item item, int cantidad) {
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("INSERT INTO cartItem(idCart, idItem, cantidad) values(?,?,?)");
             ps.setLong(1, cartId);
             ps.setLong(2, item.getId());
-            ps.setInt(3, item.getCantidad());
+            ps.setInt(3, cantidad);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -212,7 +219,8 @@ public class Database {
     public List<Item> getCartItems(Long cartId) {
         try {
             List<Item> cartItems = new ArrayList<>();
-            PreparedStatement ps = conn.prepareStatement("select * from cartItem ");
+            PreparedStatement ps = conn.prepareStatement("select * from cartItem where idCart = ? ");
+            ps.setLong(1, cartId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Item item = parseCartItem(rs);
@@ -228,10 +236,8 @@ public class Database {
 
     private Item parseCartItem(ResultSet rs) throws SQLException{
         Item item = new Item();
-        item.setId(rs.getLong("id"));
-        item.setNombre(rs.getString("nombre"));
+        item.setId(rs.getLong("idItem"));
         item.setCantidad(rs.getInt("cantidad"));
-        item.setPrecio(rs.getBigDecimal("precio"));
         return item;
 
     }
@@ -239,7 +245,7 @@ public class Database {
     public void removeAllCartItems(Long cartId) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("DELETE * FROM cartItem");
+            ps = conn.prepareStatement("DELETE FROM cartItem where idCart = ?");
             ps.setLong(1, cartId);
             ps.executeUpdate();
             ps.close();
@@ -251,12 +257,29 @@ public class Database {
     public void removeCartItem(Long cartId, Item item) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("DELETE FROM items where id = ?");
-            ps.setLong(1, item.getId());
+            ps = conn.prepareStatement("DELETE FROM cartItem where idCart = ? and idItem = ?");
+            ps.setLong(1, cartId);
+            ps.setLong(2, item.getId());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public long getMaxCartId() {
+        long res = 0;
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select max(idCart) FROM cartItem");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                res = rs.getLong(1);
+            }
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }

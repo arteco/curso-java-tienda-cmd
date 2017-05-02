@@ -14,8 +14,16 @@ import java.util.List;
  */
 public class InMemoryShoppingCart implements ShoppingCart {
 
+    static long globalId = 0;
+
+    private long id = globalId++;
     private List<Item> items = new ArrayList<>();
 
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 
     @Override
     public boolean addItem(Item item) {

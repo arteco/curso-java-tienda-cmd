@@ -76,25 +76,22 @@ public class MysqlShop  implements Shop {
 
 
     @Override
-    public void reserveItem(Long idItem, int itemQuantity, ShoppingCart cart) throws NotAvailableItem {
+    public void reserveItem(Long id, int itemQuantity, ShoppingCart cart) throws NotAvailableItem {
         // Añadir item al carrito
         // Si hay menos cantidad del item de la se solcita, mostrar lo que hay
         // Actualizar la cantidad del item según lo que se haya añadidio al carrito.
         // Si al reservar un item la cantidad de ese item se queda en  0, quitarla del shop.
-        Item itemShop = getItem(idItem);
+        Item itemShop = database.getItem(id);
         if (itemShop != null && itemShop.getCantidad() >= itemQuantity) {
             // podemos pasar el item al carrito
-            Item itemCart = new Item(
-                    itemShop.getNombre(),
-                    itemShop.getId(),
-                    itemShop.getPrecio(),
-                    itemQuantity);
-            cart.addItem(itemCart);
+            Long cartId = cart.getId();
+            database.saveCartItem(cartId, itemShop, itemQuantity);
             itemShop.setCantidad(itemShop.getCantidad() - itemQuantity);
             // si nos quedamos sin items disponibles lo eliminamos de la tienda
             if (itemShop.getCantidad() <= 0) {
                 removeItem(itemShop.getId());
             }
+            database.saveItem(itemShop);
         } else {
             throw new NotAvailableItem();
         }
@@ -104,7 +101,9 @@ public class MysqlShop  implements Shop {
     public int getTotalQuantity(Long id) {
         int cantidad = 0;
         for (Item item : database.getItems()) {
-            cantidad += item.getCantidad();
+            if (item.getId().equals(id)) {
+                cantidad += item.getCantidad();
+            }
         }
         return cantidad;
 

@@ -14,9 +14,8 @@ import java.util.List;
  */
 public class MysqlShoppingCart implements ShoppingCart {
 
-    private static long count = 0;
 
-    private Long cartId = count++;
+    private Long _cartId;
 
     private final Database database;
 
@@ -26,9 +25,17 @@ public class MysqlShoppingCart implements ShoppingCart {
 
 
     @Override
+    public Long getId() {
+        if (_cartId == null){
+            _cartId = database.getMaxCartId()+1;
+        }
+        return _cartId;
+    }
+
+    @Override
     public boolean addItem(Item item) {
         if (item != null) {
-            database.saveCartItem(cartId, item);
+            database.saveCartItem(getId(), item, item.getCantidad());
             return true;
         }
         return false;
@@ -36,7 +43,7 @@ public class MysqlShoppingCart implements ShoppingCart {
 
     @Override
     public List<Item> getItems() {
-        return database.getCartItems(cartId);
+        return database.getCartItems(getId());
     }
 
     @Override
@@ -51,14 +58,14 @@ public class MysqlShoppingCart implements ShoppingCart {
     @Override
     public Order checkout(Shop shop) {
         Order order = new Order(new ArrayList<>(getItems()));
-        database.removeAllCartItems(cartId);
-        shop.getOrders().add(order);
+        database.removeAllCartItems(getId());
+        shop.addOrder(order);
         return order;
     }
 
     @Override
     public void removeItem(Item item, Shop shop) {
-        database.removeCartItem(cartId, item);
+        database.removeCartItem(getId(), item);
         Item dbItem = shop.getItem(item.getId());
         if (dbItem != null) {
             dbItem.setCantidad(item.getCantidad() + dbItem.getCantidad());
@@ -77,9 +84,10 @@ public class MysqlShoppingCart implements ShoppingCart {
     @Override
     public BigDecimal getTotalCartPrice() {
         BigDecimal costeTotal = new BigDecimal(0);
-        for (Item item : getItems()) {
-            costeTotal = costeTotal.add(item.getPrecio())
-                    .multiply(BigDecimal.valueOf(item.getCantidad()));
+        for (Item item : database.getCartItems(getId())) {
+            BigDecimal precio = database.getItem(item.getId()).getPrecio();
+            costeTotal = costeTotal.add(precio).multiply(BigDecimal.valueOf(item.getCantidad()));
+
         }
         return costeTotal;
     }

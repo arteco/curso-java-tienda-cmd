@@ -30,7 +30,7 @@ public abstract class ShopTest {
     @Test
     public void saveItemTest() {
         Shop shop = env.getShop();
-        Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 1);
+        Item raton = new Item(201L,"Raton",  1, new BigDecimal(11.0));
         shop.saveItem(raton);
         boolean found = false;
         for (Item item : shop.getItems()) {
@@ -52,13 +52,14 @@ public abstract class ShopTest {
     @Test
     public void removeItemTest() {
         Shop shop = env.getShop();
-        Item item1 = new Item("Raton", 101L, new BigDecimal(11.0), 1);
-        Item item2 = new Item("item1", 102L, new BigDecimal(11.0), 1);
+        Item item1 = new Item(150L,"Raton",  1,new BigDecimal(11.0));
+        Item item2 = new Item(151L, "item1", 1, new BigDecimal(11.0));
+        int actualCount = shop.getItems().size();
         shop.saveItem(item1);
         shop.saveItem(item2);
-        shop.removeItem(101L);
-        shop.removeItem(102L);
-        assertEquals(0, shop.getItems().size());
+        shop.removeItem(150L);
+        shop.removeItem(151L);
+        assertEquals(actualCount, shop.getItems().size());
     }
 
     /**
@@ -68,10 +69,12 @@ public abstract class ShopTest {
     public void reserveItemTest() throws NotAvailableItem {
         Shop shop = env.getShop();
         ShoppingCart cart = env.newShoppingCart();
-        Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 5);
+        Item raton = new Item(202L,"Raton",  5,new BigDecimal(11.0));
         //añadimos el item al stock
         shop.saveItem(raton);
-        shop.reserveItem(101L, 1, cart);
+        shop.reserveItem(202L, 1, cart);
+        assertEquals(1, cart.getProductCount());
+        /*
         boolean found = false;
         for (Item item : cart.getItems()) {
             if (item.getId().equals(101L)) {
@@ -79,7 +82,7 @@ public abstract class ShopTest {
                 break;
             }
         }
-        assertTrue(found);
+        assertTrue(found);*/
     }
 
     /**
@@ -88,9 +91,9 @@ public abstract class ShopTest {
     @Test
     public void getTotalQuantityTest() {
         Shop shop = env.getShop();
-        Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 50);
+        Item raton = new Item(203L, "Raton", 50, new BigDecimal(11.0));
         shop.saveItem(raton);
-        assertEquals(50, shop.getTotalQuantity(101L));
+        assertEquals(50, shop.getTotalQuantity(203L));
     }
 
     /**
@@ -103,15 +106,15 @@ public abstract class ShopTest {
         ShoppingCart cart1 = env.newShoppingCart();
 
         Shop shop = env.getShop();
-        Item raton = new Item("Raton", 101L, new BigDecimal(11.0), 2);
-        Item item1 = new Item("item1", 102L, new BigDecimal(11.0), 2);
+        Item raton = new Item(204L, "Raton", 2, new BigDecimal(11.0));
+        Item item1 = new Item(205L, "item1",2, new BigDecimal(11.0) );
         //añadimos el item al stock
         shop.saveItem(raton);
         shop.saveItem(item1);
 
         // compramos el item
-        shop.reserveItem(101L, 1, cart);
-        shop.reserveItem(102L, 2, cart1);
+        shop.reserveItem(204L, 1, cart);
+        shop.reserveItem(205L, 2, cart1);
 
        // Order pedido = cart.checkout(shop);
         //Order pedido1 = cart1.checkout(shop);
