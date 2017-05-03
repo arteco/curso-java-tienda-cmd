@@ -48,6 +48,7 @@ public class Database {
 
     public Item getItem(Long id) {
         PreparedStatement ps = null;
+
         try {
             ps = conn.prepareStatement("select * from items where id = ? ");
             ps.setLong(1, id);
@@ -59,7 +60,7 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return  null;
     }
 
     private Item parseItem(ResultSet rs) throws SQLException {
@@ -130,16 +131,18 @@ public class Database {
         PreparedStatement ps = null;
         try {
             if (order.getIdOrder()==null){
-                order.setIdOrder((long) getOrders().size());
+                order.setIdOrder((long) getOrders().size()+1);
             }
             for (Item item : order.getOrders()) {
-                ps = conn.prepareStatement("INSERT INTO orders(idOrder, idItem, cantidad) values(?,?,?)");
+                ps = conn.prepareStatement("INSERT INTO orders(idOrder, idItem, cantidad, precio) values(?,?,?,?)");
                 ps.setLong(1, order.getIdOrder());
                 ps.setLong(2, item.getId());
                 ps.setInt(3, item.getCantidad());
+                ps.setDouble(4, item.getPrecio().doubleValue());
                 ps.executeUpdate();
+                ps.close();
             }
-            ps.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -205,10 +208,11 @@ public class Database {
     public void saveCartItem(Long cartId, Item item, int cantidad) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("INSERT INTO cartItem(idCart, idItem, cantidad) values(?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO cartItem(idCart, idItem, cantidad, precio) values(?,?,?,?)");
             ps.setLong(1, cartId);
             ps.setLong(2, item.getId());
             ps.setInt(3, cantidad);
+            ps.setDouble(4, item.getPrecio().doubleValue());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -238,6 +242,7 @@ public class Database {
         Item item = new Item();
         item.setId(rs.getLong("idItem"));
         item.setCantidad(rs.getInt("cantidad"));
+        item.setPrecio(rs.getBigDecimal("precio"));
         return item;
 
     }

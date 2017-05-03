@@ -90,8 +90,9 @@ public class MysqlShop  implements Shop {
             // si nos quedamos sin items disponibles lo eliminamos de la tienda
             if (itemShop.getCantidad() <= 0) {
                 removeItem(itemShop.getId());
+            } else{
+                database.saveItem(itemShop);
             }
-            database.saveItem(itemShop);
         } else {
             throw new NotAvailableItem();
         }
