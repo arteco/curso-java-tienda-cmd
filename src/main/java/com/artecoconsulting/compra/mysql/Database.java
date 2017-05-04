@@ -29,10 +29,8 @@ public class Database {
         }
     }
 
-    //Implementar operaciones del CRUD para items, y orders
-
     /**
-     * Se piden los items que hay en el shop ordenadas por su id ascendente.
+     * Se piden los items que hay en el shop,ordenadar por su id ascendente.
      * @return items
      */
     public List<Item> getItems() {
@@ -56,9 +54,9 @@ public class Database {
     }
 
     /**
-     * Se pide un item pasandole su id.
+     * Para comprobar si un item esta en el shop, pasandole id item.
      * @param id de item
-     * @return si no lo encuentra, devuelve null.
+     * @return item
      */
     public Item getItem(Long id) {
         PreparedStatement ps = null;
@@ -80,7 +78,7 @@ public class Database {
     }
 
     /**
-     * Setters de item
+     * Setters de item.
      * @param rs
      * @return item
      * @throws SQLException
@@ -112,7 +110,7 @@ public class Database {
     }
 
     /**
-     * Si no existe el item el el shop, asignamos un id al item y guradamos en shop.
+     * Si no existe el item en el shop, asignamos un id al item y guardamos en shop.
      * @param item
      */
     private void insertItem(Item item) {
@@ -154,8 +152,8 @@ public class Database {
     }
 
     /**
-     * Eliminamos un item pasandole el id Item.
-     * @param item
+     * Eliminamos un item del shop, pasandole el id Item.
+     * @param item datos item.
      */
     public void removeItem(Item item) {
         PreparedStatement ps = null;
@@ -210,9 +208,8 @@ public class Database {
             String sql = "Select count(cantidad) from items where id = ?";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, cantidad);
-            ResultSet rs = ps.executeQuery();
             for (Item item : getItems()) {
-                cantidad++; //= item.getCantidad();
+                cantidad++;
             }
             log.info(sql);
         } catch (SQLException e) {
@@ -228,7 +225,6 @@ public class Database {
      */
     public List<Order> getOrders() {
         try {
-            // TODO: utilizar un HashMap<Long,Order>
             String sql ="select * from orders order by idOrder asc";
             List<Order> orders = new ArrayList<>();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -342,7 +338,7 @@ public class Database {
     }
 
     /**
-     * Borrar un item del carrito.
+     * Borrar solo un item del carrito.
      * @param cartId id del carrito
      * @param item id de item.
      */
@@ -362,7 +358,8 @@ public class Database {
     }
 
     /**
-     * Devuelve el id maximimo que hay asignado para los carritos, para asignarle +1 al siguiente carrito
+     * Devuelve el id máximo que hay asignado para los carritos,
+     * para asignarle el id al siguiente carrito incrementando 1.
      * @return id maximo.
      */
     public long getMaxCartId() {
