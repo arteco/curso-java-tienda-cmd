@@ -74,7 +74,6 @@ public class InMemoryShop implements Shop {
         return items;
     }
 
-
     @Override
     public void reserveItem(Long idItem, int itemQuantity, ShoppingCart cart) throws NotAvailableItem {
         // Añadir item al carrito
@@ -107,7 +106,6 @@ public class InMemoryShop implements Shop {
             cantidad += item.getCantidad();
         }
         return cantidad;
-
     }
 
     @Override
@@ -116,7 +114,6 @@ public class InMemoryShop implements Shop {
             orders.add(order);
         }
     }
-
 
     @Override
     public List<Order> getOrders() {

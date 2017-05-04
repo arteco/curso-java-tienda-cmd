@@ -10,6 +10,7 @@ public interface ShoppingCart {
     /**
      * Devuelve el ID del Shopping Cart para
      * poder referenciarle después
+     *
      * @return
      */
     Long getId();
@@ -18,7 +19,7 @@ public interface ShoppingCart {
      * Añande un item al carrito.
      *
      * @param item
-     * @return
+     * @return true, si se ha guardado.
      */
     boolean addItem(Item item);
 

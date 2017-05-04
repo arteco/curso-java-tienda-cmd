@@ -23,11 +23,10 @@ public class MysqlShoppingCart implements ShoppingCart {
         this.database = database;
     }
 
-
     @Override
     public Long getId() {
-        if (_cartId == null){
-            _cartId = database.getMaxCartId()+1;
+        if (_cartId == null) {
+            _cartId = database.getMaxCartId() + 1;
         }
         return _cartId;
     }
@@ -70,6 +69,8 @@ public class MysqlShoppingCart implements ShoppingCart {
         if (dbItem != null) {
             dbItem.setCantidad(item.getCantidad() + dbItem.getCantidad());
             database.saveItem(dbItem);
+        }else{
+            database.saveItem(item);
         }
     }
 
@@ -84,10 +85,9 @@ public class MysqlShoppingCart implements ShoppingCart {
     @Override
     public BigDecimal getTotalCartPrice() {
         BigDecimal costeTotal = new BigDecimal(0);
-        for (Item item : database.getCartItems(getId())) {
-            BigDecimal precio = database.getItem(item.getId()).getPrecio();
-            costeTotal = costeTotal.add(precio).multiply(BigDecimal.valueOf(item.getCantidad()));
-
+        for (Item cartItem : database.getCartItems(getId())) {
+            BigDecimal precio = cartItem.getPrecio();
+            costeTotal = costeTotal.add(precio).multiply(BigDecimal.valueOf(cartItem.getCantidad()));
         }
         return costeTotal;
     }

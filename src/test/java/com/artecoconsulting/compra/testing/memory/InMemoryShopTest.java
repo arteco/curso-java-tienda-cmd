@@ -1,6 +1,5 @@
 package com.artecoconsulting.compra.testing.memory;
 
-import com.artecoconsulting.compra.Environment;
 import com.artecoconsulting.compra.memory.InMemoryEnvironment;
 import com.artecoconsulting.compra.testing.ShopTest;
 

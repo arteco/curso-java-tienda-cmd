@@ -18,4 +18,16 @@ public class Item {
     private String nombre;
     private Integer cantidad;
     private BigDecimal precio;
+
+    public boolean equals(Object arg){
+        boolean result;
+        if((arg == null) || (getClass() != arg.getClass())){
+            result = false;
+        }
+        else{
+            Item item = (Item) arg;
+            result = id.equals(item.getId());
+        }
+        return result;
+    }
 }

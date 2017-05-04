@@ -6,13 +6,12 @@ import com.artecoconsulting.compra.model.Order;
 import com.artecoconsulting.compra.model.Shop;
 import com.artecoconsulting.compra.model.ShoppingCart;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by arteco1 on 27/04/2017.
  */
-public class MysqlShop  implements Shop {
+public class MysqlShop implements Shop {
 
     private final Database database;
 
@@ -90,7 +89,7 @@ public class MysqlShop  implements Shop {
             // si nos quedamos sin items disponibles lo eliminamos de la tienda
             if (itemShop.getCantidad() <= 0) {
                 removeItem(itemShop.getId());
-            } else{
+            } else {
                 database.saveItem(itemShop);
             }
         } else {
@@ -107,7 +106,6 @@ public class MysqlShop  implements Shop {
             }
         }
         return cantidad;
-
     }
 
     @Override
@@ -116,7 +114,6 @@ public class MysqlShop  implements Shop {
             database.saveOrder(order);
         }
     }
-
 
     @Override
     public List<Order> getOrders() {

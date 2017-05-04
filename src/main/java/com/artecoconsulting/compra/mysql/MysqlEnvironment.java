@@ -1,8 +1,6 @@
 package com.artecoconsulting.compra.mysql;
 
 import com.artecoconsulting.compra.Environment;
-import com.artecoconsulting.compra.memory.InMemoryShop;
-import com.artecoconsulting.compra.memory.InMemoryShoppingCart;
 import com.artecoconsulting.compra.model.Shop;
 import com.artecoconsulting.compra.model.ShoppingCart;
 

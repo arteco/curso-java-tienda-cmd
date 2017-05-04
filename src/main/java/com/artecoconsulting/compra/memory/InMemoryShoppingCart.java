@@ -62,6 +62,8 @@ public class InMemoryShoppingCart implements ShoppingCart {
         Item dbItem = shop.getItem(item.getId());
         if (dbItem != null) {
             dbItem.setCantidad(item.getCantidad() + dbItem.getCantidad());
+        }else{
+            shop.saveItem(item);
         }
     }
 
@@ -77,8 +79,7 @@ public class InMemoryShoppingCart implements ShoppingCart {
     public BigDecimal getTotalCartPrice() {
         BigDecimal costeTotal = new BigDecimal(0);
         for (Item item : getItems()) {
-            costeTotal = costeTotal.add(item.getPrecio())
-                    .multiply(BigDecimal.valueOf(item.getCantidad()));
+            costeTotal = costeTotal.add(item.getPrecio()).multiply(BigDecimal.valueOf(item.getCantidad()));
         }
         return costeTotal;
     }
