@@ -9,7 +9,7 @@ import com.artecoconsulting.compra.model.ShoppingCart;
 import java.util.List;
 
 /**
- * Created by arteco1 on 27/04/2017.
+ * Created by Simarjeet Singh on 27/04/2017.
  */
 public class MysqlShop implements Shop {
 
@@ -26,6 +26,7 @@ public class MysqlShop implements Shop {
 
     @Override
     public boolean saveItem(Item item) {
+
         boolean guradado = false;
         if (item.getId() == null) {
             // Debemos crear un id para poder referencialo de manera unequívoca después.

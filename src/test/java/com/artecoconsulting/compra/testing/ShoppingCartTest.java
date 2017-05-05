@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by arteco1 on 12/04/2017.
@@ -46,7 +47,7 @@ public abstract class ShoppingCartTest {
         cart.addItem(pantalla);
         cart.addItem(cpu);
         assertEquals(3, cart.getProductCount());
-        //  assertEquals(new BigDecimal(516), cart.getTotalCartPrice());
+        assertEquals(new BigDecimal(516), cart.getTotalCartPrice());
     }
 
     /**
@@ -64,15 +65,12 @@ public abstract class ShoppingCartTest {
         shop.saveItem(item);
 
         ShoppingCart cart = env.newShoppingCart();
-
         shop.reserveItem(-500L, 1, cart);
 
-        // item = shop.getItem(-500L);
-//        assertNull(item);
+        item = shop.getItem(-500L);
+        assertNull(item);
 
         cart.checkout(shop);
-        //assertEquals(order.getOrders().get(0).getNombre(), "Prueba item");
-
         int orders = shop.getOrders().size();
         assertEquals(orders, shop.getOrders().size());
     }
@@ -117,6 +115,4 @@ public abstract class ShoppingCartTest {
         assertEquals(0, cart.getProductCount());
         assertEquals(new BigDecimal(0), cart.getTotalCartPrice());
     }
-
-
 }

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Created by arteco1 on 20/04/2017.
+ * Created by Simarjeet Singh on 20/04/2017.
  */
 @Data
 @NoArgsConstructor
@@ -26,4 +26,5 @@ public class Order {
     public BigDecimal getTotalPrice() {
         throw new IllegalArgumentException();
     }
+
 }
