@@ -16,7 +16,7 @@ public interface Environment {
 
     /**
      * Devuelve la instancia del un carrito sobre la que se va a trabajar.
-     * Se crea un carrito nuevo por cada compra.
+     * Se crea un carrito nuevo por cada compra
      * @return
      */
     ShoppingCart newShoppingCart();
