@@ -1,8 +1,13 @@
 # PRÁCTICA - curso-java-tienda-cmd
 
+
 ## Enunciado
 
 Creación de un programa Java por Consola que permita a los clientes realizar pedidos y al gestor gestionar su stock.
+
+Se debe realizar con maven, spring boot, java 8 y git. El módulo una vez desarrollado será subido a github. 
+El primer paso es comenzar en https://start.spring.io
+
 
 ### Limitaciones del programa
 
