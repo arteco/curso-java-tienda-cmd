@@ -46,10 +46,25 @@ El primer test unitario deberá tener la siguiente forma:
 
 	ShopEnvironment env = new InMemmoryShopEnvironment();
 	Shop shop = env.getShop();
-	shop.addItemToStock(new Item(1L,"Awesome item",100.)); // ID, Description, Price
+	shop.addItemToStock(new Item(1L,"Awesome item",100.), 3); // ID, Description, Price. Cantidad de Items.
 	Asserts.assertTrue(shop.countStock()>0);
 	
 En los tests se debe trabajar con las interfaces. Únicamente se permite acceder a la implementación de InMemmoryShopEnviroment como punto inicial.
+
+#### Metodología 
+
+Se usará Test Driven Development (TTD) como metodología de realización de esta práctica.
+
+Pasos a seguir:
+
+1. PRIMERO escribir los tests del gestor. El gestor debe poder interactuar con el stock, añadir item, eliminar item, consultar el stock,.... Al escribir los tests, iremos necesitando que la interfaz Shop tenga métodos que permitan realizar dichas tareas. Por lo tanto declararemos esos métodos en la interfaz mientras escribimos los tests.
+
+2. SEGUNDO crear una implementación de Shop, por ejemplo ShopImpl que contenga el cuerpo de los métodos de la interfaz. En un primer paso basta que devuelva valores fijos para que podamos ejecutar el test, aunque no éste termine dando fallo (de assert), pero al menos debe poder ejecutarse.
+
+3. TERCERO, mejorar la implementación para que se cubran todos los casos de test del manager: Altas de nuevo stock, bajas, modificaciones (de precio, de cantidades, de la descripción), etc.
+
+4. CUARTO, realizar los mismos pasos para el cliente.
+
 	
 ### PASO 2 - Enumeración de los test necesarios que validen los requisitos funcionales
 
