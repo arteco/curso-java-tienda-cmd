@@ -40,7 +40,16 @@ Se deberá utilizar una metodología orientada a desarrollo por Tests.
 ### PASO 1 - Identificación y definición de INTERFACES:
 
 1. Identificar las diferentes INTERFACES que intervienen: Shop, Customer, Manager, Item, Carry, ...
-1. Todas las interfaces deben ser accesibles vía un único punto de entrada, también una interfaz: Environment. Por ejemplo: Environment env = new InMemmoryEnviroment(); Shop shop = env.getShop();
+1. Todas las interfaces deben ser accesibles vía un único punto de entrada, también una interfaz: ShopEnvironment. Por ejemplo: ShopEnvironment env = new InMemmoryShopEnviroment(); Shop shop = env.getShop();
+
+El primer test unitario deberá tener la siguiente forma:
+
+	ShopEnvironment env = new InMemmoryShopEnvironment();
+	Shop shop = env.getShop();
+	shop.addItemToStock(new Item(1L,"Awesome item",100.)); // ID, Description, Price
+	Asserts.assertTrue(shop.countStock()>0);
+	
+En los tests se debe trabajar con las interfaces. Únicamente se permite acceder a la implementación de InMemmoryShopEnviroment como punto inicial.
 	
 ### PASO 2 - Enumeración de los test necesarios que validen los requisitos funcionales
 
